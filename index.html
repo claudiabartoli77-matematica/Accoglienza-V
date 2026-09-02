@@ -145,6 +145,21 @@ $("continueBtn").onclick=()=>{current++;$("reward").classList.remove("show");if(
 applyBackground($("formulaBg"),CONFIG.immagineMateFinale);
 $("videoLink").href=CONFIG.videoTrasformazione;
 $("activateFormula").onclick=()=>{const ok=RISPOSTE_FINALI.map(normalize).includes(normalize($("finalInput").value));if(!ok){$("formulaMessage").textContent="La formula non è ancora corretta. Osserva bene i sette frammenti.";return}showScreen("victory");applyBackground($("victoryBg"),CONFIG.immagineMaticaFinale);tryImage($("maticaMedia"),CONFIG.immagineMaticaFinale)};
+// Precarica in background tutti gli sfondi
+[
+  "quesito1.png",
+  "quesito2.png",
+  "quesito3.png",
+  "quesito4.png",
+  "quesito5.png",
+  "quesito6.png",
+  "quesito7.png",
+  "mate-finale.png",
+  "matica-finale.png"
+].forEach(file => {
+  const img = new Image();
+  img.src = file;
+});
 </script>
 </body>
 </html>
