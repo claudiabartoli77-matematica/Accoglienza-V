@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Mate e Matica – La formula perduta</title>
+<style>
+:root{--pink:#e83e8c;--ink:#4a2a3b;--paper:rgba(255,249,239,.97)}
+*{box-sizing:border-box} html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#131019;font-family:Georgia,"Times New Roman",serif}
+button,input{font:inherit}.screen{position:fixed;inset:0;display:none;overflow:hidden}.screen.active{display:block}
+.bg{position:absolute;inset:0;background-position:center;background-size:cover;background-repeat:no-repeat;background-color:#2a2140}
+.bg::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.08),rgba(0,0,0,.30))}
+.center-wrap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:18px}
+.panel{width:min(760px,94vw);max-height:88vh;overflow:auto;background:var(--paper);color:var(--ink);border:2px solid rgba(232,62,140,.55);border-radius:28px;padding:24px;box-shadow:0 22px 60px rgba(0,0,0,.45)}
+.panel h1,.panel h2{color:#b42e6d;margin-top:0}.intro-panel,.final-panel{text-align:center}
+.media-box{height:min(52vh,520px);border-radius:22px;overflow:hidden;margin:12px 0;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#ffd7e8,#eee3ff);color:#a33e70;font:800 21px Arial,sans-serif}
+.media-box video,.media-box img{width:100%;height:100%;object-fit:contain}
+.primary,.challenge-btn,.option,.continue,.video-btn{border:0;border-radius:16px;cursor:pointer;font-weight:800}
+.primary,.challenge-btn{color:#fff;background:linear-gradient(#ff77b7,#d72f79);box-shadow:0 7px 18px rgba(0,0,0,.22)} .primary{padding:14px 24px}
+.video-btn{padding:12px 18px;color:#fff;background:#241725;margin-top:8px;text-decoration:none;display:inline-block}
+.topbar{position:absolute;z-index:5;top:max(12px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);width:min(94vw,900px);display:flex;align-items:center;justify-content:space-between;gap:8px}
+.badge{padding:9px 14px;border-radius:999px;color:white;background:rgba(25,16,28,.72);backdrop-filter:blur(8px);font:700 13px Arial,sans-serif;border:1px solid rgba(255,255,255,.2)}
+.challenge-btn{position:absolute;z-index:5;top:max(62px,calc(env(safe-area-inset-top) + 62px));left:50%;transform:translateX(-50%);padding:12px 20px}
+.modal,.reward{position:absolute;z-index:10;inset:0;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(8,5,11,.52);backdrop-filter:blur(3px)} .modal.show,.reward.show{display:flex}
+.card,.reward-card{width:min(730px,94vw);max-height:86vh;overflow:auto;background:var(--paper);color:var(--ink);border:2px solid rgba(232,62,140,.55);border-radius:26px;padding:22px;box-shadow:0 22px 60px rgba(0,0,0,.45)}
+.close{float:right;border:0;background:transparent;font-size:26px;color:#8b5570;cursor:pointer}.story{color:#735466;font-size:17px;line-height:1.45;margin-bottom:12px}.question{font-size:clamp(20px,3vw,27px);line-height:1.35;margin:14px 0}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:10px}.option{padding:14px 16px;text-align:left;background:#fff0f7;color:#79254f;border:1px solid #eea5c5}
+.answer-row{display:flex;gap:10px}.answer-row input,.final-input{min-width:0;height:52px;padding:10px 14px;border-radius:14px;border:2px solid #eda3c3;color:#402539;background:white;font-size:18px}.answer-row input{flex:1}
+.fragments{display:flex;gap:5px;flex-wrap:wrap;margin-top:15px;justify-content:center}.fragment{min-width:46px;text-align:center;padding:7px 9px;border-radius:10px;background:#f1dce7;color:#93687e;border:1px dashed #dba8c0;font:800 13px Arial,sans-serif}.fragment.found{background:#fff0aa;color:#6a4b00;border:1px solid #e2b65b}
+.reward-card{text-align:center}.reward-word{font:900 clamp(44px,11vw,84px)/1 Arial,sans-serif;color:#d6307a;margin:18px 0}.continue{width:100%;padding:14px;background:#171217;color:#fff;font-size:18px}
+.final-input{width:100%;margin:12px 0}.success-title{font-size:clamp(27px,5vw,48px);color:#b52e6e;font-weight:900}
+.placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:28px;color:rgba(255,255,255,.85);font:800 clamp(28px,7vw,84px)/1.02 Arial,sans-serif;background:linear-gradient(135deg,#522f6d,#28536b 48%,#6e3b54)}
+@media(max-width:620px){.panel,.card,.reward-card{padding:18px}.options{grid-template-columns:1fr}.answer-row{flex-direction:column}.answer-row .primary{width:100%}.media-box{height:58vh}}
+</style>
+</head>
+<body>
+<script>
+const CONFIG={tempoStanza:90,videoIntro:"./mate-intro.mp4",immagineMateFinale:"./mate-finale.png",immagineMaticaFinale:"./matica-finale.png",videoTrasformazione:"https://youtu.be/74YmjejFF3o"};
+const STANZE=[
+{titolo:"Il Portale dei Numeri Perduti",storia:"Il portale si apre soltanto davanti al numero costruito correttamente.",tipo:"scelta",frammento:"DUE",varianti:[
+{quesito:"Quale numero corrisponde a 1 centinaio di migliaia, 7 migliaia, 2 centinaia, 2 decine e 8 unità?",opzioni:["170 228","107 228","107 208","100 728"],corretta:1},
+{quesito:"Quale numero corrisponde a 2 centinaia di migliaia, 4 migliaia, 5 centinaia, 3 decine e 1 unità?",opzioni:["240 531","204 531","204 351","200 451"],corretta:1},
+{quesito:"Quale numero corrisponde a 3 centinaia di migliaia, 6 migliaia, 8 centinaia, 4 decine e 2 unità?",opzioni:["360 842","306 842","306 482","300 682"],corretta:1}]},
+{titolo:"La Scala delle Cifre",storia:"Solo il gradino con il numero più grande reggerà il peso di Mate.",tipo:"scelta",frammento:"PER",varianti:[
+{quesito:"Quale numero è il più grande?",opzioni:["60 214","60 123","64 020","62 410"],corretta:2},
+{quesito:"Quale numero è il più grande?",opzioni:["71 305","71 530","70 935","71 350"],corretta:1},
+{quesito:"Quale numero è il più grande?",opzioni:["85 901","85 190","85 910","85 109"],corretta:2}]},
+{titolo:"La Bottega dell'Alchimista",storia:"L'alchimista pesa due essenze. Per ottenere il frammento serve la somma esatta.",tipo:"input",frammento:"ERRE",varianti:[
+{quesito:"Calcola 3 507,6 + 4 530,8.",risposte:["8038,4","8038.4","8 038,4"]},
+{quesito:"Calcola 2 406,5 + 3 120,7.",risposte:["5527,2","5527.2","5 527,2"]},
+{quesito:"Calcola 4 215,3 + 2 304,6.",risposte:["6519,9","6519.9","6 519,9"]}]},
+{titolo:"Il Mercato delle Pergamene",storia:"Il mercante consegnerà il frammento soltanto ricevendo la cifra esatta.",tipo:"scelta",frammento:"PER",varianti:[
+{quesito:"Tre pergamene costano 2,20 € ciascuna e una penna magica costa 3,25 €. Quanto si spende in tutto?",opzioni:["5,45 €","8,85 €","9,85 €","10,45 €"],corretta:2},
+{quesito:"Due mappe costano 3,40 € ciascuna e una bussola costa 2,15 €. Quanto si spende in tutto?",opzioni:["5,55 €","8,95 €","9,15 €","6,95 €"],corretta:1},
+{quesito:"Quattro pergamene costano 1,50 € ciascuna e una piuma magica costa 2,80 €. Quanto si spende in tutto?",opzioni:["7,30 €","8,80 €","6,80 €","9,20 €"],corretta:1}]},
+{titolo:"Il Banchetto delle Frazioni",storia:"Sul tavolo magico alcune parti sono illuminate. Devi scrivere la frazione corretta.",tipo:"input",frammento:"PI",varianti:[
+{quesito:"Il banchetto è diviso in 6 parti uguali e 4 sono illuminate. Quale frazione rappresentano?",risposte:["4/6","quattro sesti"]},
+{quesito:"Il banchetto è diviso in 8 parti uguali e 3 sono illuminate. Quale frazione rappresentano?",risposte:["3/8","tre ottavi"]},
+{quesito:"Il banchetto è diviso in 10 parti uguali e 7 sono illuminate. Quale frazione rappresentano?",risposte:["7/10","sette decimi"]}]},
+{titolo:"Il Sentiero Incantato",storia:"La mappa parla di chilometri, ma il segnale magico accetta soltanto metri.",tipo:"scelta",frammento:"GRE",varianti:[
+{quesito:"Il sentiero è lungo 2 km. Quanti metri sono?",opzioni:["20 m","200 m","2 000 m","20 000 m"],corretta:2},
+{quesito:"Il sentiero è lungo 3 km. Quanti metri sono?",opzioni:["30 m","300 m","3 000 m","30 000 m"],corretta:2},
+{quesito:"Il sentiero è lungo 5 km. Quanti metri sono?",opzioni:["50 m","500 m","5 000 m","50 000 m"],corretta:2},
+{quesito:"Il sentiero è lungo 7 km. Quanti metri sono?",opzioni:["70 m","700 m","7 000 m","70 000 m"],corretta:2}]},
+{titolo:"Il Giardino delle Forme",storia:"L'ultima porta è circondata da una cornice rettangolare. Il frammento è nascosto nel suo perimetro.",tipo:"input",frammento:"CO",varianti:[
+{quesito:"La cornice ha lati di 8 cm e 5 cm. Qual è il suo perimetro?",risposte:["26","26 cm"]},
+{quesito:"La cornice ha lati di 7 cm e 4 cm. Qual è il suo perimetro?",risposte:["22","22 cm"]},
+{quesito:"La cornice ha lati di 9 cm e 6 cm. Qual è il suo perimetro?",risposte:["30","30 cm"]},
+{quesito:"La cornice ha lati di 10 cm e 3 cm. Qual è il suo perimetro?",risposte:["26","26 cm"]}]}
+];
+const RISPOSTE_FINALI=["2*r*pi","2*pi*r","2xr*pi","2 x r x pi","2 x pi x r","2×r×π","2πr","2 pi r","due per erre per pi greco","2 per r per pi greco"];
+</script>
+
+<section id="intro" class="screen active">
+<div class="center-wrap" style="background:radial-gradient(circle at 50% 20%,#7b3e75,#271c3a 60%,#10121b)">
+<div class="panel intro-panel">
+<h1>La formula perduta</h1>
+<div class="media-box"><video id="introVideo" playsinline preload="metadata"><source src="./mate-intro.mp4" type="video/mp4"></video></div>
+<p>Mate ha dimenticato la formula magica che le permette di trasformarsi in Matica. I sette frammenti sono dispersi nel Regno della Matematica.</p>
+<p><b>Qual è la formula magica che trasforma Mate in Matica?</b></p>
+<button class="video-btn" id="listenMate">▶ ASCOLTA MATE</button>
+<p><button class="primary" id="startBtn">INIZIA LA MISSIONE</button></p>
+</div></div>
+</section>
+
+<section id="game" class="screen">
+<div id="sceneBg" class="bg"><div id="scenePlaceholder" class="placeholder"></div></div>
+<div class="topbar"><div id="roomBadge" class="badge">TAPPA 1/7</div><div id="timer" class="badge">⏱ 01:30</div></div>
+<button id="openChallenge" class="challenge-btn">✨ APRI LA SFIDA</button>
+<div id="modal" class="modal"><div class="card"><button id="closeModal" class="close">×</button><h2 id="roomTitle"></h2><div id="roomStory" class="story"></div><div id="question" class="question"></div><div id="answerArea"></div><div id="fragments" class="fragments"></div></div></div>
+<div id="reward" class="reward"><div class="reward-card"><div>✨ FRAMMENTO RITROVATO ✨</div><div id="rewardWord" class="reward-word"></div><p>Conservalo: ti servirà alla fine della missione.</p><button id="continueBtn" class="continue">PROSEGUI</button></div></div>
+</section>
+
+<section id="formulaScreen" class="screen">
+<div id="formulaBg" class="bg"><div class="placeholder">FINALE · MATE</div></div>
+<div class="center-wrap"><div class="panel final-panel"><h1>I sette frammenti sono completi!</h1><div id="finalFragments" class="fragments"></div><p><b>Qual è la formula magica che trasforma Mate in Matica?</b></p><input id="finalInput" class="final-input" placeholder="Scrivi qui la formula..."><button id="activateFormula" class="primary">ATTIVA LA FORMULA</button><p id="formulaMessage"></p></div></div>
+</section>
+
+<section id="victory" class="screen">
+<div id="victoryBg" class="bg"><div class="placeholder">MISSIONE COMPIUTA · MATICA</div></div>
+<div class="center-wrap"><div class="panel final-panel"><div class="success-title">✨ Mate è diventata Matica! ✨</div><div class="media-box" id="maticaMedia"><span>Qui apparirà <b>matica-finale.png</b></span></div><p>Hai ricostruito la formula magica.</p><p><b>2 × r × π</b> è la formula della lunghezza della circonferenza.</p><a class="video-btn" id="videoLink" href="https://youtu.be/74YmjejFF3o" target="_blank" rel="noopener">▶ GUARDA LA TRASFORMAZIONE</a></div></div>
+</section>
+
+<script>
+let current=0,chosen=null,found=[],remaining=CONFIG.tempoStanza,timerId=null;
+const $=id=>document.getElementById(id);
+const normalize=v=>String(v).toLowerCase().trim().replace(/\s+/g,"").replace(/,/g,".").replace(/×/g,"x").replace(/π/g,"pi");
+
+function showScreen(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));$(id).classList.add("active")}
+function applyBackground(el,file){
+  const img=new Image();
+  img.onload=()=>{
+    el.style.backgroundImage=`url("${file}")`;
+    const ph=el.querySelector(".placeholder"); if(ph) ph.style.display="none";
+  };
+  img.onerror=()=>{
+    const ph=el.querySelector(".placeholder");
+    if(ph){ph.style.display="flex";ph.textContent="FILE NON TROVATO: "+file;}
+    console.error("Risorsa non trovata:",file);
+  };
+  img.src=file;
+}
+function tryImage(container,file){const img=new Image();img.onload=()=>{container.innerHTML="";img.style.width="100%";img.style.height="100%";img.style.objectFit="contain";container.appendChild(img)};img.src=file}
+function fmt(s){return `${String(Math.floor(s/60)).padStart(2,"0")}:${String(s%60).padStart(2,"0")}`}
+function startTimer(){clearInterval(timerId);remaining=CONFIG.tempoStanza;$("timer").textContent="⏱ "+fmt(remaining);timerId=setInterval(()=>{remaining--;$("timer").textContent="⏱ "+fmt(remaining);if(remaining<=0){clearInterval(timerId);alert("Tempo scaduto! La missione ricomincia.");restart()}},1000)}
+function renderFragments(target){target.innerHTML="";STANZE.forEach((s,i)=>{const d=document.createElement("div");d.className="fragment"+(i<found.length?" found":"");d.textContent=i<found.length?s.frammento:"?";target.appendChild(d)})}
+function loadRoom(){const s=STANZE[current];chosen=s.varianti[Math.floor(Math.random()*s.varianti.length)];$("roomBadge").textContent=`TAPPA ${current+1}/${STANZE.length}`;$("roomTitle").textContent=s.titolo;$("roomStory").textContent=s.storia;$("modal").classList.remove("show");$("reward").classList.remove("show");$("sceneBg").style.backgroundImage="none";$("scenePlaceholder").style.display="flex";$("scenePlaceholder").textContent=`AMBIENTE ${current+1} · ${s.titolo}`;applyBackground($("sceneBg"),`./quesito${current+1}.png`);renderFragments($("fragments"));startTimer()}
+function fail(){clearInterval(timerId);alert("Risposta errata! Il percorso si richiude: bisogna ripartire dall'inizio.");restart()}
+function success(){clearInterval(timerId);found.push(STANZE[current].frammento);$("modal").classList.remove("show");$("rewardWord").textContent=STANZE[current].frammento;$("reward").classList.add("show")}
+function buildAnswer(){const s=STANZE[current],area=$("answerArea");$("question").textContent=chosen.quesito;area.innerHTML="";if(s.tipo==="scelta"){const grid=document.createElement("div");grid.className="options";chosen.opzioni.forEach((op,i)=>{const b=document.createElement("button");b.className="option";b.textContent=`${String.fromCharCode(65+i)}. ${op}`;b.onclick=()=>i===chosen.corretta?success():fail();grid.appendChild(b)});area.appendChild(grid)}else{const row=document.createElement("div");row.className="answer-row";const inp=document.createElement("input");inp.placeholder="Inserisci la risposta...";const btn=document.createElement("button");btn.className="primary";btn.textContent="SBLOCCA";const check=()=>chosen.risposte.map(normalize).includes(normalize(inp.value))?success():fail();btn.onclick=check;inp.addEventListener("keydown",e=>{if(e.key==="Enter")check()});row.append(inp,btn);area.appendChild(row)}renderFragments($("fragments"))}
+function restart(){clearInterval(timerId);current=0;chosen=null;found=[];$("finalInput").value="";$("formulaMessage").textContent="";showScreen("intro")}
+
+$("listenMate").onclick=()=>{
+  const v=$("introVideo");
+  v.currentTime=0;
+  v.play().catch(err=>{
+    alert("Non riesco ad aprire ./mate-intro.mp4. Controlla che il nome del file coincida esattamente, comprese maiuscole/minuscole.");
+    console.error(err);
+  });
+};
+$("startBtn").onclick=()=>{showScreen("game");loadRoom()};
+$("openChallenge").onclick=()=>{buildAnswer();$("modal").classList.add("show")};
+$("closeModal").onclick=()=>$("modal").classList.remove("show");
+$("continueBtn").onclick=()=>{current++;$("reward").classList.remove("show");if(current>=STANZE.length){renderFragments($("finalFragments"));showScreen("formulaScreen")}else loadRoom()};
+applyBackground($("formulaBg"),CONFIG.immagineMateFinale);
+$("videoLink").href=CONFIG.videoTrasformazione;
+$("activateFormula").onclick=()=>{const ok=RISPOSTE_FINALI.map(normalize).includes(normalize($("finalInput").value));if(!ok){$("formulaMessage").textContent="La formula non è ancora corretta. Osserva bene i sette frammenti.";return}showScreen("victory");applyBackground($("victoryBg"),CONFIG.immagineMaticaFinale);tryImage($("maticaMedia"),CONFIG.immagineMaticaFinale)};
+</script>
+</body>
+</html>
