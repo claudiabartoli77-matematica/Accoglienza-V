@@ -38,11 +38,11 @@ button,input{font:inherit}.screen{position:fixed;inset:0;display:none;overflow:h
 const CONFIG={tempoStanza:90,videoIntro:"./mate-intro.mp4",immagineMateFinale:"./mate-finale.png",immagineMaticaFinale:"./matica-finale.png",videoTrasformazione:"https://youtu.be/74YmjejFF3o"};
 const STANZE=[
 {titolo:"Il Portale dei Numeri Perduti",storia:"Il portale si apre soltanto davanti al numero costruito correttamente.",tipo:"scelta",frammento:"DUE",varianti:[
-{quesito:"Quale numero corrisponde a 7 centinaia di migliaia, 1 migliaia, 3 centinaia, 3 decine e 8 unità?",opzioni:["170 338","701 338","107 308","103 738"],corretta:1},
-{quesito:"Quale numero corrisponde a 2 centinaia di migliaia, 4 migliaia, 5 centinaia, 3 decine e 1 unità?",opzioni:["204 531","240 531","204 351","200 451"],corretta:0},
-{quesito:"Quale numero corrisponde a 3 centinaia di migliaia, 6 migliaia, 8 centinaia, 4 decine e 2 unità?",opzioni:["360 842","306 842","306 482","300 682"],corretta:1},
-{quesito:"Quale numero corrisponde a 4 centinaia di migliaia, 6 decine di migliaia, 2 centinaia, 5 decine e 7 unità?",opzioni:["406 257","460 527","460 257","400 657"],corretta:2},
-{quesito:"Quale numero corrisponde a 3 centinaia di migliaia, 8 decine di migliaia, 7 centinaia, 4 decine e 2 unità?",opzioni:["380 742","308 742","380 472","387 042"],corretta:0}]},
+{quesito:"Quale numero corrisponde a  1 migliaia, 3 centinaia, 7 centinaia di migliaia, 8 unità e 3 decine?",opzioni:["170 338","701 338","107 308","103 738"],corretta:1},
+{quesito:"Quale numero corrisponde a  4 migliaia, 3 decine, 5 centinaia, 2 centinaia di migliaia, e 1 unità?",opzioni:["204 531","240 531","204 351","200 451"],corretta:0},
+{quesito:"Quale numero corrisponde a 2 unità, 3 centinaia di migliaia, 8 centinaia, 6 migliaia e 4 decine?",opzioni:["360 842","306 842","306 482","300 682"],corretta:1},
+{quesito:"Quale numero corrisponde a 6 decine di migliaia, 2 centinaia, 7 unità, 4 centinaia di migliaia e 5 decine?",opzioni:["406 257","460 527","460 257","400 657"],corretta:2},
+{quesito:"Quale numero corrisponde a 3 centinaia di migliaia, 7 centinaia, 8 decine di migliaia, 4 decine e 2 unità?",opzioni:["380 742","308 742","380 472","387 042"],corretta:0}]},
 {titolo:"La Scala delle Cifre",storia:"Solo il gradino con il numero più grande reggerà il peso di Mate.",tipo:"scelta",frammento:"PER",varianti:[
 {quesito:"Quale numero è il più grande?",opzioni:["60 214","60 123","64 020","62 410"],corretta:2},
 {quesito:"Quale numero è il più grande?",opzioni:["71 305","71 530","70 935","71 350"],corretta:1},
@@ -52,7 +52,7 @@ const STANZE=[
 {quesito:"Calcola 2 406,5 + 3 120,7.",risposte:["5527,2","5527.2","5 527,2"]},
 {quesito:"Calcola 4 215,3 + 2 304,6.",risposte:["6519,9","6519.9","6 519,9"]}]},
 {titolo:"Il Mercato delle Pergamene",storia:"Il mercante consegnerà il frammento soltanto ricevendo la cifra esatta.",tipo:"scelta",frammento:"PER",varianti:[
-{quesito:"Tre pergamene costano 2,20 € ciascuna e una penna magica costa 3,25 €. Quanto si spende in tutto?",opzioni:["5,45 €","8,85 €","9,85 €","10,45 €"],corretta:2},
+{quesito:"Tre pergamene costano 2,20 € ciascuna e una penna magica costa 3,25 €. Quanto si spende in tutto?",opzioni:["5,45 €","8,85 €","9,85 €","9,95 €"],corretta:2},
 {quesito:"Due mappe costano 3,40 € ciascuna e una bussola costa 2,15 €. Quanto si spende in tutto?",opzioni:["5,55 €","8,95 €","9,15 €","6,95 €"],corretta:1},
 {quesito:"Quattro pergamene costano 1,50 € ciascuna e una piuma magica costa 2,80 €. Quanto si spende in tutto?",opzioni:["7,30 €","8,80 €","6,80 €","9,20 €"],corretta:1}]},
 {titolo:"Il Banchetto delle Frazioni",storia:"Sul tavolo magico alcune parti sono illuminate. Devi scrivere la frazione corretta.",tipo:"input",frammento:"PI",varianti:[
