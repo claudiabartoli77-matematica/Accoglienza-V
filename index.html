@@ -55,10 +55,10 @@ const STANZE=[
 {quesito:"Tre pergamene costano 2,20 € ciascuna e una penna magica costa 3,25 €. Quanto si spende in tutto?",opzioni:["5,45 €","8,85 €","9,85 €","9,95 €"],corretta:2},
 {quesito:"Due mappe costano 3,40 € ciascuna e una bussola costa 2,15 €. Quanto si spende in tutto?",opzioni:["5,55 €","8,95 €","9,15 €","6,95 €"],corretta:1},
 {quesito:"Quattro pergamene costano 1,50 € ciascuna e una piuma magica costa 2,80 €. Quanto si spende in tutto?",opzioni:["7,30 €","8,80 €","6,80 €","9,20 €"],corretta:1}]},
-{titolo:"Il Banchetto delle Frazioni",storia:"Sul tavolo magico alcune parti sono illuminate. Devi scrivere la frazione corretta.",tipo:"input",frammento:"PI",varianti:[
-{quesito:"Il banchetto è diviso in 6 parti uguali e 4 sono illuminate. Quale frazione rappresentano?",risposte:["4/6","quattro sesti", "2/3", "due terzi"]},
-{quesito:"Il banchetto è diviso in 8 parti uguali e 3 sono illuminate. Quale frazione rappresentano?",risposte:["3/8","tre ottavi"]},
-{quesito:"Il banchetto è diviso in 10 parti uguali e 7 sono illuminate. Quale frazione rappresentano?",risposte:["7/10","sette decimi"]}]},
+{titolo:"Il Banchetto delle Frazioni",storia:"Osserva con attenzione le figure e confronta le aree.",tipo:"input",frammento:"PI",varianti:[
+{quesito:"Quale frazione dell'intera figura occupa l'area verde?",immagine:"frazione1.png",risposte:["1/3","un terzo","2/6","due sesti"]},
+{quesito:"Quale frazione dell'intera figura occupa l'area blu?",immagine:"frazione2.png",risposte:["2/3","due terzi","4/6","quattro sesti"]},
+{quesito:"Quale frazione dell'intera figura occupa l'area rossa?",immagine:"frazione3.png",risposte:["1/4","un quarto"]}]},
 {titolo:"Il Sentiero Incantato",storia:"La mappa parla di chilometri, ma il segnale magico accetta soltanto metri.",tipo:"scelta",frammento:"GRE",varianti:[
 {quesito:"Il sentiero è lungo 2 km. Quanti metri sono?",opzioni:["20 m","200 m","2 000 m","20 000 m"],corretta:2},
 {quesito:"Il sentiero è lungo 0,3 km. Quanti metri sono?",opzioni:["30 m","300 m","3 000 m","30 000 m"],corretta:1},
@@ -129,7 +129,53 @@ function renderFragments(target){target.innerHTML="";STANZE.forEach((s,i)=>{cons
 function loadRoom(){const s=STANZE[current];chosen=s.varianti[Math.floor(Math.random()*s.varianti.length)];$("roomBadge").textContent=`TAPPA ${current+1}/${STANZE.length}`;$("roomTitle").textContent=s.titolo;$("roomStory").textContent=s.storia;$("modal").classList.remove("show");$("reward").classList.remove("show");$("sceneBg").style.backgroundImage="none";$("scenePlaceholder").style.display="flex";$("scenePlaceholder").textContent=`AMBIENTE ${current+1} · ${s.titolo}`;applyBackground($("sceneBg"),`./quesito${current+1}.png`);renderFragments($("fragments"));startTimer()}
 function fail(){clearInterval(timerId);alert("Risposta errata! Il percorso si richiude: bisogna ripartire dall'inizio.");restart()}
 function success(){clearInterval(timerId);found.push(STANZE[current].frammento);$("modal").classList.remove("show");$("rewardWord").textContent=STANZE[current].frammento;$("reward").classList.add("show")}
-function buildAnswer(){const s=STANZE[current],area=$("answerArea");$("question").textContent=chosen.quesito;area.innerHTML="";if(s.tipo==="scelta"){const grid=document.createElement("div");grid.className="options";chosen.opzioni.forEach((op,i)=>{const b=document.createElement("button");b.className="option";b.textContent=`${String.fromCharCode(65+i)}. ${op}`;b.onclick=()=>i===chosen.corretta?success():fail();grid.appendChild(b)});area.appendChild(grid)}else{const row=document.createElement("div");row.className="answer-row";const inp=document.createElement("input");inp.placeholder="Inserisci la risposta...";const btn=document.createElement("button");btn.className="primary";btn.textContent="SBLOCCA";const check=()=>chosen.risposte.map(normalize).includes(normalize(inp.value))?success():fail();btn.onclick=check;inp.addEventListener("keydown",e=>{if(e.key==="Enter")check()});row.append(inp,btn);area.appendChild(row)}renderFragments($("fragments"))}
+function buildAnswer(){
+  const s=STANZE[current],area=$("answerArea");
+  $("question").textContent=chosen.quesito;
+  area.innerHTML="";
+
+  // Se il quesito contiene un'immagine, la mostra
+  if(chosen.immagine){
+    const img=document.createElement("img");
+    img.src=chosen.immagine;
+    img.alt="Immagine del quesito";
+    img.style.display="block";
+    img.style.maxWidth="100%";
+    img.style.maxHeight="280px";
+    img.style.objectFit="contain";
+    img.style.margin="10px auto 18px";
+    img.style.borderRadius="12px";
+    area.appendChild(img);
+  }
+
+  if(s.tipo==="scelta"){
+    const grid=document.createElement("div");
+    grid.className="options";
+    chosen.opzioni.forEach((op,i)=>{
+      const b=document.createElement("button");
+      b.className="option";
+      b.textContent=`${String.fromCharCode(65+i)}. ${op}`;
+      b.onclick=()=>i===chosen.corretta?success():fail();
+      grid.appendChild(b);
+    });
+    area.appendChild(grid);
+  }else{
+    const row=document.createElement("div");
+    row.className="answer-row";
+    const inp=document.createElement("input");
+    inp.placeholder="Inserisci la risposta...";
+    const btn=document.createElement("button");
+    btn.className="primary";
+    btn.textContent="SBLOCCA";
+    const check=()=>chosen.risposte.map(normalize).includes(normalize(inp.value))?success():fail();
+    btn.onclick=check;
+    inp.addEventListener("keydown",e=>{if(e.key==="Enter")check()});
+    row.append(inp,btn);
+    area.appendChild(row);
+  }
+
+  renderFragments($("fragments"));
+}
 function restart(){clearInterval(timerId);current=0;chosen=null;found=[];$("finalInput").value="";$("formulaMessage").textContent="";showScreen("intro")}
 
 $("listenMate").onclick=()=>{
@@ -156,6 +202,9 @@ $("activateFormula").onclick=()=>{const ok=RISPOSTE_FINALI.map(normalize).includ
   "quesito5.png",
   "quesito6.png",
   "quesito7.png",
+  "frazione1.png",
+  "frazione2.png",
+  "frazione3.png",
   "mate-finale.png",
   "matica-finale.png"
 ].forEach(file => {
