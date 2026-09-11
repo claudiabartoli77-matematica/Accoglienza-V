@@ -30,6 +30,10 @@ button,input{font:inherit}.screen{position:fixed;inset:0;display:none;overflow:h
 .reward-card{text-align:center}.reward-word{font:900 clamp(44px,11vw,84px)/1 Arial,sans-serif;color:#d6307a;margin:18px 0}.continue{width:100%;padding:14px;background:#171217;color:#fff;font-size:18px}
 .final-input{width:100%;margin:12px 0}.success-title{font-size:clamp(27px,5vw,48px);color:#b52e6e;font-weight:900}
 .placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:28px;color:rgba(255,255,255,.85);font:800 clamp(28px,7vw,84px)/1.02 Arial,sans-serif;background:linear-gradient(135deg,#522f6d,#28536b 48%,#6e3b54)}
+.privacy-link{position:fixed;z-index:30;right:14px;bottom:max(12px,env(safe-area-inset-bottom));border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:8px 13px;color:#fff;background:rgba(25,16,28,.78);backdrop-filter:blur(8px);font:700 12px Arial,sans-serif;cursor:pointer}
+.privacy-dialog{box-sizing:border-box;width:min(680px,calc(100% - 32px));max-height:min(82vh,760px);padding:28px;border:0;border-radius:22px;color:var(--ink);background:#fffaf2;box-shadow:0 24px 70px rgba(0,0,0,.45)}
+.privacy-dialog::backdrop{background:rgba(8,5,11,.72);backdrop-filter:blur(3px)}
+.privacy-dialog h2{margin:0 42px 18px 0;color:#b42e6d}.privacy-dialog p{line-height:1.55}.privacy-dialog a{color:#8f2058}.privacy-dialog .close{position:absolute;top:14px;right:16px;float:none}
 @media(max-width:620px){.panel,.card,.reward-card{padding:18px}.options{grid-template-columns:1fr}.answer-row{flex-direction:column}.answer-row .primary{width:100%}.media-box{height:58vh}}
 </style>
 </head>
@@ -216,5 +220,18 @@ $("activateFormula").onclick=()=>{const ok=RISPOSTE_FINALI.map(normalize).includ
   img.src = file;
 });
 </script>
+
+<button class="privacy-link" type="button" onclick="document.getElementById('privacyDialog').showModal()">Informativa privacy</button>
+
+<dialog id="privacyDialog" class="privacy-dialog" aria-labelledby="privacyTitle">
+  <form method="dialog">
+    <button class="close" type="submit" aria-label="Chiudi">×</button>
+  </form>
+  <h2 id="privacyTitle">Informativa privacy</h2>
+  <p>Questa attività didattica non richiede registrazione e non raccoglie né trasmette all’autrice nomi, indirizzi email, risposte, punteggi o altri dati personali degli utenti.</p>
+  <p>L’attività è ospitata tramite GitHub Pages. Durante la navigazione GitHub può trattare dati tecnici, come indirizzo IP, tipo di dispositivo, data e ora di accesso, secondo la propria <a href="https://docs.github.com/it/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener noreferrer">informativa privacy</a>.</p>
+  <p>L’attività contiene un collegamento esterno a YouTube, che si attiva soltanto quando l’utente seleziona il pulsante “Guarda la trasformazione”. Da quel momento il trattamento dei dati è regolato dall’<a href="https://policies.google.com/privacy?hl=it" target="_blank" rel="noopener noreferrer">informativa privacy di Google</a>. L’autrice dell’attività non riceve da YouTube informazioni nominative sugli utenti che aprono il collegamento.</p>
+  <p>Per informazioni relative ai contenuti dell’attività: <a href="mailto:claudiabartoli77@libero.it">claudiabartoli77@libero.it</a>.</p>
+</dialog>
 </body>
 </html>
